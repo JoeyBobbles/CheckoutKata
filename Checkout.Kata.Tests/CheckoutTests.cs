@@ -58,6 +58,15 @@ namespace Checkout.Kata.Tests
                     new Item("B15", 0.30m),
                     new Item("C40", 0.60m)
                 }, 1.40m).SetName("Mix of items with total");
+                yield return new TestCaseData(new List<Item>
+                {
+                    new Item("A99", 0.50m),
+                    new Item("A99", 0.50m),
+                    new Item("A99", 0.50m),
+                    new Item("A99", 0.50m),
+                    new Item("A99", 0.50m),
+                    new Item("A99", 0.50m)
+                }, 2.60m).SetName("Six items with A99 product");
             }
         }
         

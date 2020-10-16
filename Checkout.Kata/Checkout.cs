@@ -25,7 +25,7 @@ namespace Checkout.Kata
         {
             _basket.Add(item);
 
-            var matchingItems = _basket.Where(matchingItem => matchingItem.Sku == item.Sku).ToList();
+            var matchingItems = _basket.Where(matchingItem => matchingItem.Sku == item.Sku && matchingItem.UnitPrice == item.UnitPrice).ToList();
             var availableOffer = _productRepository.GetAllOffers().FirstOrDefault(offer => offer.Sku == item.Sku);
             
             if (availableOffer == null || availableOffer.Quantity != matchingItems.Count) return;
