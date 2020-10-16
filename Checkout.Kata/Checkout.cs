@@ -7,14 +7,17 @@ namespace Checkout.Kata
     {
         public decimal Total()
         {
-            return 0m;
+            return _runningTotal;
         }
  
         public List<Item> Basket => _basket;
         private readonly List<Item> _basket = new List<Item>();
+
+        private decimal _runningTotal = 0m;
         
         public void Scan(Item item)
         {
+            _runningTotal += item.UnitPrice;
             _basket.Add(item);
         }
     }

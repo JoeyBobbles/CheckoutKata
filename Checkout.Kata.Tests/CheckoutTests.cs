@@ -23,5 +23,17 @@ namespace Checkout.Kata.Tests
             // Verify that we've stored that scanned item
             Assert.That(checkout.Basket.Contains(item));
         }
+
+        [Test]
+        public void ScanItemGetTotal()
+        {
+            decimal expectedTotal = 0.50m;
+            var checkout = new Checkout();
+            var item = new Item("A99", 0.50m);
+
+            checkout.Scan(item);
+            
+            Assert.AreEqual(expectedTotal, checkout.Total());
+        }
     }
 }
