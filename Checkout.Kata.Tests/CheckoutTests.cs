@@ -10,9 +10,11 @@ namespace Checkout.Kata.Tests
         }
 
         [Test]
-        public void Test1()
+        public void ScanItem()
         {
-            Assert.Pass();
+            var checkout = new Checkout();
+
+            Assert.DoesNotThrow( () => checkout.Scan(new Item()));
         }
     }
 }
