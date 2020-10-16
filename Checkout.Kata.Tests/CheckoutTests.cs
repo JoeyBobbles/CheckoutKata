@@ -27,6 +27,40 @@ namespace Checkout.Kata.Tests
             });
         }
 
+        public static IEnumerable<TestCaseData> CheckoutItemsWithTotalTestCases
+        {
+            get
+            {
+                yield return new TestCaseData(new List<Item>
+                {
+                    new Item("A99", 0.50m),
+                    new Item("A99", 0.50m),
+                    new Item("A99", 0.50m)
+                }, 1.30m).SetName("Three items with A99 product");
+                yield return new TestCaseData(new List<Item>
+                {
+                    new Item("A99", 0.50m),
+                    new Item("A99", 0.50m),
+                    new Item("A99", 0.50m),
+                    new Item("B15", 0.30m)
+                }, 1.60m).SetName("Three items with A99 and one B15");
+                yield return new TestCaseData(new List<Item>
+                {
+                    new Item("A99", 0.50m),
+                    new Item("B15", 0.30m),
+                    new Item("A99", 0.50m),
+                    new Item("B15", 0.30m),
+                    new Item("A99", 0.50m)
+                }, 1.75m).SetName("Mix of items with expected discount");
+                yield return new TestCaseData(new List<Item>
+                {
+                    new Item("A99", 0.50m),
+                    new Item("B15", 0.30m),
+                    new Item("C40", 0.60m)
+                }, 1.40m).SetName("Mix of items with total");
+            }
+        }
+        
         [Test]
         public void ScanItem()
         {
@@ -60,6 +94,17 @@ namespace Checkout.Kata.Tests
             var checkout = new Checkout(_mockProductRepository.Object);
             var items = new List<Item> {new Item("A99", 0.50m), new Item("A99", 0.50m), new Item("A99", 0.50m)};
             var expectedTotal = 1.30m;
+            
+            items.ForEach(item => checkout.Scan(item));
+            
+            Assert.AreEqual(expectedTotal, checkout.Total());
+        }
+
+        [Test]
+        [TestCaseSource(nameof(CheckoutItemsWithTotalTestCases))]
+        public void AddMultipleItemsWithOffers(List<Item> items, decimal expectedTotal)
+        {
+            var checkout = new Checkout(_mockProductRepository.Object);
             
             items.ForEach(item => checkout.Scan(item));
             
