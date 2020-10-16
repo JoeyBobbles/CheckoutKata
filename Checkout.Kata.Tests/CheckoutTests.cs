@@ -1,18 +1,36 @@
+using System.Collections.Generic;
+using Moq;
 using NUnit.Framework;
 
 namespace Checkout.Kata.Tests
 {
     public class CheckoutTests
     {
+        private Mock<IProductRepository> _mockProductRepository;
+        
         [SetUp]
         public void Setup()
         {
+            _mockProductRepository = new Mock<IProductRepository>();
+
+            _mockProductRepository.Setup(repository => repository.GetAllItems()).Returns(new List<Item>
+            {
+                new Item("A99", 0.5m),
+                new Item("B15", 0.3m),
+                new Item("C40", 0.6m)
+            });
+
+            _mockProductRepository.Setup(repository => repository.GetAllOffers()).Returns(new List<Offer>
+            {
+                new Offer("A99", 1.30m, 3),
+                new Offer("B15", 0.45m, 2)
+            });
         }
 
         [Test]
         public void ScanItem()
         {
-            var checkout = new Checkout();
+            var checkout = new Checkout(_mockProductRepository.Object);
             
             // Create out first item and try to scan it
             var item = new Item("A99", 0.50m);
@@ -28,10 +46,22 @@ namespace Checkout.Kata.Tests
         public void ScanItemGetTotal()
         {
             decimal expectedTotal = 0.50m;
-            var checkout = new Checkout();
+            var checkout = new Checkout(_mockProductRepository.Object);
             var item = new Item("A99", 0.50m);
 
             checkout.Scan(item);
+            
+            Assert.AreEqual(expectedTotal, checkout.Total());
+        }
+
+        [Test]
+        public void AddItemsWithOffer()
+        {
+            var checkout = new Checkout(_mockProductRepository.Object);
+            var items = new List<Item> {new Item("A99", 0.50m), new Item("A99", 0.50m), new Item("A99", 0.50m)};
+            var expectedTotal = 1.30m;
+            
+            items.ForEach(item => checkout.Scan(item));
             
             Assert.AreEqual(expectedTotal, checkout.Total());
         }
