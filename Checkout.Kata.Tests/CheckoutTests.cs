@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace Checkout.Kata.Tests
 {
-    public class Tests
+    public class CheckoutTests
     {
         [SetUp]
         public void Setup()
