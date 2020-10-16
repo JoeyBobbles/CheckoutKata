@@ -13,8 +13,11 @@ namespace Checkout.Kata.Tests
         public void ScanItem()
         {
             var checkout = new Checkout();
-
-            Assert.DoesNotThrow( () => checkout.Scan(new Item()));
+            
+            // Create out first item and try to scan it
+            var item = new Item("A99", 0.50m);
+            
+            Assert.DoesNotThrow( () => checkout.Scan(item));
         }
     }
 }
